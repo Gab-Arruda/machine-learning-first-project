@@ -40,40 +40,41 @@ gnb = GaussianNB()
 y_pred = gnb.fit(train_X, train_y).predict(test_X)
 # print("Number of mislabeled points out of a total %d points : %d"% (test_X.shape[0], (test_y != y_pred).sum()))
 
+
 def k_fold(k):
-  X_zero = X[0:59]
-  X_one = X[59:130]
-  X_two = X[130:]
-  fold_length = round(len(X)/k)
-  print("fold length: ", fold_length)
-  class_zero_proportion = len(X_zero)/len(X)
-  class_one_proportion = len(X_one)/len(X)
-  class_two_proportion = len(X_two)/len(X)
-  print('class zero proportion:', class_one_proportion)
-  proportion_to_zero_class = round(class_zero_proportion * fold_length)
-  proportion_to_one_class = round(class_one_proportion * fold_length)
-  proportion_to_two_class = round(class_two_proportion * fold_length)
+    X_zero = X[0:59]
+    X_one = X[59:130]
+    X_two = X[130:]
+    fold_length = round(len(X)/k)
+    print("fold length: ", fold_length)
+    class_zero_proportion = len(X_zero)/len(X)
+    class_one_proportion = len(X_one)/len(X)
+    class_two_proportion = len(X_two)/len(X)
+    print('class zero proportion:', class_one_proportion)
+    proportion_to_zero_class = round(class_zero_proportion * fold_length)
+    proportion_to_one_class = round(class_one_proportion * fold_length)
+    proportion_to_two_class = round(class_two_proportion * fold_length)
 
-  print('proportion_to_one_class:', proportion_to_one_class)
-  lista = []
-  temp_list = []
+    print('proportion_to_one_class:', proportion_to_one_class)
+    lista = []
+    temp_list = []
 
-  for i in range(k):
-    # print(round(class_zero_proportion * fold_length))
-    # if(i == k-1):
-    #   print('pegar o resto')
-    #   temp_list.extend(X_zero[:proportion_to_zero_class])
-    #   temp_list.extend(X_zero[:proportion_to_zero_class])
-    #   temp_list.extend(X_zero[:proportion_to_zero_class])
+    for i in range(k):
+        # print(round(class_zero_proportion * fold_length))
+        # if(i == k-1):
+        #   print('pegar o resto')
+        #   temp_list.extend(X_zero[:proportion_to_zero_class])
+        #   temp_list.extend(X_zero[:proportion_to_zero_class])
+        #   temp_list.extend(X_zero[:proportion_to_zero_class])
 
-    temp_list.extend(X_zero[:proportion_to_zero_class])
-    X_zero = X_zero[proportion_to_zero_class:]
-    temp_list.extend(X_one[:proportion_to_one_class])
-    X_one = X_one[proportion_to_one_class:]
-    temp_list.extend(X_two[:proportion_to_two_class])
-    X_two = X_two[proportion_to_two_class:]
-    print('len(temp_list) =', len(temp_list))
-    print('len(X_zero):', len(X_one))
-    lista.append(temp_list)
+        temp_list.extend(X_zero[:proportion_to_zero_class])
+        X_zero = X_zero[proportion_to_zero_class:]
+        temp_list.extend(X_one[:proportion_to_one_class])
+        X_one = X_one[proportion_to_one_class:]
+        temp_list.extend(X_two[:proportion_to_two_class])
+        X_two = X_two[proportion_to_two_class:]
+        print('len(temp_list) =', len(temp_list))
+        print('len(X_zero):', len(X_one))
+        lista.append(temp_list)
 
 # k_fold(3)
