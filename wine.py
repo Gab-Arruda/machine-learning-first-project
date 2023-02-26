@@ -26,6 +26,7 @@ X_normalized = preprocessing.normalize(X, norm='l2')
 
 # Lembrar de testar diferentes parâmetros no treinamento para explicar no relatório os melhores
 train_X, test_X, train_y, test_y = train_test_split(X, y, test_size=0.2)
+print(type(train_X[0]))
 model=KNeighborsClassifier(n_neighbors=3)
 model.fit(train_X,train_y)
 prediction=model.predict(test_X)
@@ -46,16 +47,16 @@ def k_fold(k):
     X_one = X[59:130]
     X_two = X[130:]
     fold_length = round(len(X)/k)
-    print("fold length: ", fold_length)
+    # print("fold length: ", fold_length)
     class_zero_proportion = len(X_zero)/len(X)
     class_one_proportion = len(X_one)/len(X)
     class_two_proportion = len(X_two)/len(X)
-    print('class zero proportion:', class_one_proportion)
+    # print('class zero proportion:', class_one_proportion)
     proportion_to_zero_class = round(class_zero_proportion * fold_length)
     proportion_to_one_class = round(class_one_proportion * fold_length)
     proportion_to_two_class = round(class_two_proportion * fold_length)
 
-    print('proportion_to_one_class:', proportion_to_one_class)
+    # print('proportion_to_one_class:', proportion_to_one_class)
     lista = []
     temp_list = []
 
@@ -73,8 +74,8 @@ def k_fold(k):
         X_one = X_one[proportion_to_one_class:]
         temp_list.extend(X_two[:proportion_to_two_class])
         X_two = X_two[proportion_to_two_class:]
-        print('len(temp_list) =', len(temp_list))
-        print('len(X_zero):', len(X_one))
+        # print('len(temp_list) =', len(temp_list))
+        # print('len(X_zero):', len(X_one))
         lista.append(temp_list)
 
 # k_fold(3)

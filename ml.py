@@ -25,26 +25,27 @@ def k_fold(k):
     lista = []
 
     for i in range(k):
-        temp_list = []
+        temp_list = pd.DataFrame()
 
         # Se for última iteração pega tudo que sobrou, mesmo que fique fold maior
         if i == k:
-            temp_list.append(class_one_df)
-            temp_list.append(class_two_df)
-            temp_list.append(class_three_df)
+            temp_list = pd.append([class_one_df])
+            temp_list = pd.append([temp_list, class_two_df])
+            temp_list = pd.append([temp_list, class_three_df])
             lista.append(temp_list)
 
         else:
-            temp_list.append(class_one_df.head(proportion_to_one_class))
+            temp_list = pd.concat([class_one_df.head(proportion_to_one_class)])
             class_one_df = class_one_df.iloc[proportion_to_one_class:]
 
-            temp_list.append(class_two_df.head(proportion_to_two_class))
+            temp_list = pd.concat([temp_list, class_two_df.head(proportion_to_two_class)])
             class_two_df = class_two_df.iloc[proportion_to_two_class:]
 
-            temp_list.append(class_three_df.head(proportion_to_three_class))
+            temp_list = pd.concat([temp_list, class_three_df.head(proportion_to_three_class)])
             class_three_df = class_three_df.iloc[proportion_to_three_class:]
 
             lista.append(temp_list)
+
     return lista
 
 
@@ -55,14 +56,14 @@ def test_algorithms(data):
         folds = data.copy()
         del folds[i]
 
-        concatenated = []
-        for f in folds:
-            concatenated.extend(f)
-            print(type(f[0]))
-
-        print('-----------------------------')
-        # print(type(concatenated))
-        # print(concatenated)
+        concatenated = pd.concat(folds)
+        # remover a classe do concatenated para um Y, e transformar X e Y para lista para passar pro knn
+        # usar products_list = df.values.tolist()
+        print('concatenated = ', concatenated)
+        print('_______________________')
+        print('i = ', i)
 
 
+# list_folds = k_fold(3)
+# print(list_folds)
 test_algorithms(k_fold(3))
