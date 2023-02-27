@@ -26,7 +26,7 @@ X_normalized = preprocessing.normalize(X, norm='l2')
 
 # Lembrar de testar diferentes parâmetros no treinamento para explicar no relatório os melhores
 train_X, test_X, train_y, test_y = train_test_split(X, y, test_size=0.2)
-print(type(train_X[0]))
+# print(type(train_X[0]))
 model=KNeighborsClassifier(n_neighbors=3)
 model.fit(train_X,train_y)
 prediction=model.predict(test_X)
@@ -39,7 +39,9 @@ prediction=model.predict(test_X)
 
 gnb = GaussianNB()
 y_pred = gnb.fit(train_X, train_y).predict(test_X)
-# print("Number of mislabeled points out of a total %d points : %d"% (test_X.shape[0], (test_y != y_pred).sum()))
+print(test_X)
+print(test_X.shape[0])
+print("Number of mislabeled points out of a total %d points : %d"% (test_X.shape[0], (test_y != y_pred).sum()))
 
 
 def k_fold(k):
