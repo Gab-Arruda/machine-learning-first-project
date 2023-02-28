@@ -25,27 +25,25 @@ def k_fold(k):
     lista = []
 
     for i in range(k):
-        temp_list = pd.DataFrame()
-
-        # Se for última iteração pega tudo que sobrou, mesmo que fique fold maior
-        if i == k:
-            temp_list = pd.append([class_one_df])
-            temp_list = pd.append([temp_list, class_two_df])
-            temp_list = pd.append([temp_list, class_three_df])
+        # Se for última iteração pega tudo que sobrou, mesmo que fique fold de tamanho diferente
+        if i == k-1:
+            temp_list = pd.concat([class_one_df])
+            temp_list = pd.concat([temp_list, class_two_df])
+            temp_list = pd.concat([temp_list, class_three_df])
             lista.append(temp_list)
         else:
-            # depois testar pegar aleatório de class_one_df
-            temp_list = pd.concat([class_one_df.head(proportion_to_one_class)])
-            class_one_df = class_one_df.iloc[proportion_to_one_class:]
+            temp_list = class_one_df.sample(proportion_to_one_class)
+            class_one_df = class_one_df.drop(temp_list.index.values.tolist())
 
-            temp_list = pd.concat([temp_list, class_two_df.head(proportion_to_two_class)])
-            class_two_df = class_two_df.iloc[proportion_to_two_class:]
+            class_two_sample = class_two_df.sample(proportion_to_two_class)
+            temp_list = pd.concat([temp_list, class_two_sample])
+            class_two_df = class_two_df.drop(class_two_sample.index.values.tolist())
 
-            temp_list = pd.concat([temp_list, class_three_df.head(proportion_to_three_class)])
-            class_three_df = class_three_df.iloc[proportion_to_three_class:]
+            class_three_sample = class_three_df.sample(proportion_to_three_class)
+            temp_list = pd.concat([temp_list, class_three_sample])
+            class_three_df = class_three_df.drop(class_three_sample.index.values.tolist())
 
             lista.append(temp_list)
-
     return lista
 
 
@@ -326,11 +324,11 @@ def calc_mean(evaluation_metrics):
     rev_mean = rev_value / len(evaluation_metrics)
     f1_mean = f1_value / len(evaluation_metrics)
 
-    # print('Acc = ', acc_mean)
-    # print('Precisão = ', precision_mean)
-    # print('Revogação = ', rev_mean)
-    # print('F1 = ', f1_mean)
-    # print('                            ')
+    print('Acc = ', acc_mean)
+    print('Precisão = ', precision_mean)
+    print('Revogação = ', rev_mean)
+    print('F1 = ', f1_mean)
+    print('                            ')
 
     return acc_mean, precision_mean, rev_mean, f1_mean
 
