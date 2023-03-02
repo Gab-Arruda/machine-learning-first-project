@@ -11,7 +11,7 @@ X = df.drop(['class'], axis=1)
 y = df['class'].values
 train_atributes, test_atributes, train_classes, test_classes = train_test_split(X, y, test_size=0.20,
                                                                                 stratify=y, random_state=42)
-test_dataset = train_atributes
+test_dataset = train_atributes.copy()
 test_dataset['class'] = train_classes
 
 
@@ -341,5 +341,110 @@ def calc_mean(evaluation_metrics):
     return acc_mean, precision_mean, rev_mean, f1_mean
 
 
-list_folds = k_fold(5, test_dataset)
-test_algorithms(list_folds)
+def final_test(train_x, test_x, train_y, test_y):
+    train_x_normalized = preprocessing.normalize(train_x, norm='l2')
+    test_x_normalized = preprocessing.normalize(test_x, norm='l2')
+
+    acc_knn_list = []
+    acc_decision_tree_list = []
+    acc_naive_bayes_list = []
+
+    precision_knn_list = []
+    precision_decision_tree_list = []
+    precision_naive_bayes_list = []
+
+    rev_knn_list = []
+    rev_decision_tree_list = []
+    rev_naive_bayes_list = []
+
+    f1_knn_list = []
+    f1_decision_tree_list = []
+    f1_naive_bayes_list = []
+
+    print('KNN')
+    prediction = knn(train_x_normalized, train_y, test_x_normalized)
+    matrix = confusion_matrix(prediction, test_y.tolist())
+    evaluation_metrics = calculate_evaluation_metrics(matrix)
+    mean_list = calc_mean(evaluation_metrics)
+
+    acc_knn_list.append(mean_list[0])
+    precision_knn_list.append(mean_list[1])
+    rev_knn_list.append(mean_list[2])
+    f1_knn_list.append(mean_list[3])
+
+    print('Decision Tree')
+    prediction = decision_tree(train_x_normalized, train_y, test_x_normalized)
+    matrix = confusion_matrix(prediction, test_y.tolist())
+    evaluation_metrics = calculate_evaluation_metrics(matrix)
+    mean_list = calc_mean(evaluation_metrics)
+
+    acc_decision_tree_list.append(mean_list[0])
+    precision_decision_tree_list.append(mean_list[1])
+    rev_decision_tree_list.append(mean_list[2])
+    f1_decision_tree_list.append(mean_list[3])
+
+    print('Naive Bayes')
+    prediction = naive_bayes_gaussian(train_x_normalized, train_y, test_x_normalized)
+    matrix = confusion_matrix(prediction, test_y.tolist())
+    evaluation_metrics = calculate_evaluation_metrics(matrix)
+    mean_list = calc_mean(evaluation_metrics)
+
+    acc_naive_bayes_list.append(mean_list[0])
+    precision_naive_bayes_list.append(mean_list[1])
+    rev_naive_bayes_list.append(mean_list[2])
+    f1_naive_bayes_list.append(mean_list[3])
+
+    # plot_acc_dict = {
+    #     'knn': acc_knn_list,
+    #     'decision tree': acc_decision_tree_list,
+    #     'naive bayes': acc_naive_bayes_list
+    # }
+    #
+    # fig, ax = plt.subplots()
+    # ax.boxplot(plot_acc_dict.values())
+    # ax.set_xticklabels(plot_acc_dict.keys())
+    # plt.title('Acurácia')
+    # plt.show()
+    #
+    # plot_precision_dict = {
+    #     'knn': precision_knn_list,
+    #     'decision tree': precision_decision_tree_list,
+    #     'naive bayes': precision_naive_bayes_list
+    # }
+    #
+    # fig, ax = plt.subplots()
+    # ax.boxplot(plot_precision_dict.values())
+    # ax.set_xticklabels(plot_precision_dict.keys())
+    # plt.title('Precisão')
+    # plt.show()
+    #
+    # plot_rev_dict = {
+    #     'knn': rev_knn_list,
+    #     'decision tree': rev_decision_tree_list,
+    #     'naive bayes': rev_naive_bayes_list
+    # }
+    #
+    # fig, ax = plt.subplots()
+    # ax.boxplot(plot_rev_dict.values())
+    # ax.set_xticklabels(plot_rev_dict.keys())
+    # plt.title('Revogação')
+    # plt.show()
+    #
+    # plot_f1_dict = {
+    #     'knn': f1_knn_list,
+    #     'decision tree': f1_decision_tree_list,
+    #     'naive bayes': f1_naive_bayes_list
+    # }
+    #
+    # fig, ax = plt.subplots()
+    # ax.boxplot(plot_f1_dict.values())
+    # ax.set_xticklabels(plot_f1_dict.keys())
+    # plt.title('F1')
+    # plt.show()
+
+
+# list_folds = k_fold(5, test_dataset)
+# test_algorithms(list_folds)
+
+# Utiliza o holdout inicial de 80%/20%
+final_test(train_atributes, test_atributes, train_classes, test_classes)
