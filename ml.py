@@ -101,7 +101,7 @@ def k_fold(k, dataframe):
     return lista
 
 
-def test_algorithms(data):
+def cross_validation(data):
     """
         Pega as fold passados e os passa por knn, árvore de decisão e Naive Bayes Gaussiano.
 
@@ -227,7 +227,7 @@ def test_algorithms(data):
     fig3, ax3 = plt.subplots()
     ax3.boxplot(plot_rev_dict.values())
     ax3.set_xticklabels(plot_rev_dict.keys())
-    plt.title('Revogação')
+    plt.title('Revocação')
 
     plot_f1_dict = {
         'knn': f1_knn_list,
@@ -463,7 +463,7 @@ def final_test(train_x, test_x, train_y, test_y):
 
 
 list_folds = k_fold(5, test_dataset)
-test_algorithms(list_folds)
+cross_validation(list_folds)
 
 # Utiliza o holdout inicial de 80%/20% para fazer teste final
 final_test(train_atributes, test_atributes, train_classes, test_classes)
