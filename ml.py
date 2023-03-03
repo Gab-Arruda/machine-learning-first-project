@@ -1,10 +1,13 @@
-import pandas as pd
-import matplotlib.pyplot as plt
-from sklearn.model_selection import train_test_split
-import sklearn.preprocessing as preprocessing
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.naive_bayes import GaussianNB
+import pandas as pd  # utilizado para tratar os dados obtidos a partir do csv
+import numpy as np  # cálculo de média e desvio padrão
+import matplotlib.pyplot as plt  # plot do histograma e boxplot dos desempenhos
+import seaborn as sns  # plot do gráfico de violino e mapa de calor
+from sklearn.model_selection import train_test_split  # fazer o holdout
+import sklearn.preprocessing as preprocessing  # normalização dos dados
+from sklearn.neighbors import KNeighborsClassifier  # método knn
+from sklearn.tree import DecisionTreeClassifier  # método de árvore de decisão
+from sklearn.naive_bayes import GaussianNB  # Naive Bayes Gaussiano
+from sklearn.tree import plot_tree  # plot da árvore
 
 df = pd.read_csv('wine.csv')
 X = df.drop(['class'], axis=1)
@@ -13,6 +16,49 @@ train_atributes, test_atributes, train_classes, test_classes = train_test_split(
                                                                                 stratify=y, random_state=42)
 test_dataset = train_atributes.copy()
 test_dataset['class'] = train_classes
+
+# pairplot da distribuição de instâncias por atributo
+# sns.pairplot(df, hue="class")
+# plt.show()
+
+# gráfico histograma
+# X.hist()
+# fig = plt.gcf()
+# plt.show()
+
+# gráfico violino
+# df.rename(columns={'class': 'tipo de uva'}, inplace=True)
+# plt.subplot(3, 5, 1)
+# sns.violinplot(x='tipo de uva', y='alcohol', data=df)
+# plt.subplot(3, 5, 2)
+# sns.violinplot(x='tipo de uva', y='malic_acid', data=df)
+# plt.subplot(3, 5, 3)
+# sns.violinplot(x='tipo de uva', y='ash', data=df)
+# plt.subplot(3, 5, 4)
+# sns.violinplot(x='tipo de uva', y='alcalinity_of_ash', data=df)
+# plt.subplot(3, 5, 5)
+# sns.violinplot(x='tipo de uva', y='magnesium', data=df)
+# plt.subplot(3, 5, 6)
+# sns.violinplot(x='tipo de uva', y='total_phenols', data=df)
+# plt.subplot(3, 5, 7)
+# sns.violinplot(x='tipo de uva', y='flavanoids', data=df)
+# plt.subplot(3, 5, 8)
+# sns.violinplot(x='tipo de uva', y='nonflavanoid_phenols', data=df)
+# plt.subplot(3, 5, 9)
+# sns.violinplot(x='tipo de uva', y='proanthocyanins', data=df)
+# plt.subplot(3, 5, 10)
+# sns.violinplot(x='tipo de uva', y='color_intensity', data=df)
+# plt.subplot(3, 5, 11)
+# sns.violinplot(x='tipo de uva', y='hue', data=df)
+# plt.subplot(3, 5, 12)
+# sns.violinplot(x='tipo de uva', y='od280/od315_of_diluted_wines', data=df)
+# plt.subplot(3, 5, 13)
+# sns.violinplot(x='tipo de uva', y='proline', data=df)
+# plt.show()
+
+# heatmap
+# sns.heatmap(X.corr(), annot=True)
+# plt.show()
 
 
 def k_fold(k, dataframe):
@@ -129,52 +175,67 @@ def test_algorithms(data):
 
         print('_________________________________________________________________________')
 
-    # plot_acc_dict = {
-    #     'knn': acc_knn_list,
-    #     'decision tree': acc_decision_tree_list,
-    #     'naive bayes': acc_naive_bayes_list
-    # }
-    #
-    # fig, ax = plt.subplots()
-    # ax.boxplot(plot_acc_dict.values())
-    # ax.set_xticklabels(plot_acc_dict.keys())
-    # plt.title('Acurácia')
-    # plt.show()
-    #
-    # plot_precision_dict = {
-    #     'knn': precision_knn_list,
-    #     'decision tree': precision_decision_tree_list,
-    #     'naive bayes': precision_naive_bayes_list
-    # }
-    #
-    # fig, ax = plt.subplots()
-    # ax.boxplot(plot_precision_dict.values())
-    # ax.set_xticklabels(plot_precision_dict.keys())
-    # plt.title('Precisão')
-    # plt.show()
-    #
-    # plot_rev_dict = {
-    #     'knn': rev_knn_list,
-    #     'decision tree': rev_decision_tree_list,
-    #     'naive bayes': rev_naive_bayes_list
-    # }
-    #
-    # fig, ax = plt.subplots()
-    # ax.boxplot(plot_rev_dict.values())
-    # ax.set_xticklabels(plot_rev_dict.keys())
-    # plt.title('Revogação')
-    # plt.show()
-    #
-    # plot_f1_dict = {
-    #     'knn': f1_knn_list,
-    #     'decision tree': f1_decision_tree_list,
-    #     'naive bayes': f1_naive_bayes_list
-    # }
-    #
-    # fig, ax = plt.subplots()
-    # ax.boxplot(plot_f1_dict.values())
-    # ax.set_xticklabels(plot_f1_dict.keys())
-    # plt.title('F1')
+    print('acc_knn_mean and std_dev:', np.mean(acc_knn_list), np.std(acc_knn_list))
+    print('acc_decision_tree_list and std_dev:', np.mean(acc_decision_tree_list), np.std(acc_decision_tree_list))
+    print('acc_naive_bayes_list and std_dev:', np.mean(acc_naive_bayes_list), np.std(acc_naive_bayes_list))
+    print('   ')
+    print('precision_knn_list and std_dev:', np.mean(precision_knn_list), np.std(precision_knn_list))
+    print('precision_decision_tree_list and std_dev:', np.mean(precision_decision_tree_list),
+          np.std(precision_decision_tree_list))
+    print('precision_naive_bayes_list and std_dev:', np.mean(precision_naive_bayes_list),
+          np.std(precision_naive_bayes_list))
+    print('   ')
+    print('rev_knn_list and std_dev:', np.mean(rev_knn_list), np.std(rev_knn_list))
+    print('rev_decision_tree_list and std_dev:', np.mean(rev_decision_tree_list), np.std(rev_decision_tree_list))
+    print('rev_naive_bayes_list and std_dev:', np.mean(rev_naive_bayes_list), np.std(rev_naive_bayes_list))
+    print('   ')
+    print('f1_knn_list and std_dev:', np.mean(f1_knn_list), np.std(f1_knn_list))
+    print('f1_decision_tree_list and std_dev:', np.mean(f1_decision_tree_list), np.std(f1_decision_tree_list))
+    print('f1_naive_bayes_list and std_dev:', np.mean(f1_naive_bayes_list), np.std(f1_naive_bayes_list))
+
+    plot_acc_dict = {
+        'knn': acc_knn_list,
+        'decision tree': acc_decision_tree_list,
+        'naive bayes': acc_naive_bayes_list
+    }
+
+    fig1, ax1 = plt.subplots()
+    ax1.boxplot(plot_acc_dict.values())
+    ax1.set_xticklabels(plot_acc_dict.keys())
+    plt.title('Acurácia')
+
+    plot_precision_dict = {
+        'knn': precision_knn_list,
+        'decision tree': precision_decision_tree_list,
+        'naive bayes': precision_naive_bayes_list
+    }
+
+    fig2, ax2 = plt.subplots()
+    ax2.boxplot(plot_precision_dict.values())
+    ax2.set_xticklabels(plot_precision_dict.keys())
+    plt.title('Precisão')
+
+    plot_rev_dict = {
+        'knn': rev_knn_list,
+        'decision tree': rev_decision_tree_list,
+        'naive bayes': rev_naive_bayes_list
+    }
+
+    fig3, ax3 = plt.subplots()
+    ax3.boxplot(plot_rev_dict.values())
+    ax3.set_xticklabels(plot_rev_dict.keys())
+    plt.title('Revogação')
+
+    plot_f1_dict = {
+        'knn': f1_knn_list,
+        'decision tree': f1_decision_tree_list,
+        'naive bayes': f1_naive_bayes_list
+    }
+
+    fig4, ax4 = plt.subplots()
+    ax4.boxplot(plot_f1_dict.values())
+    ax4.set_xticklabels(plot_f1_dict.keys())
+    plt.title('F1')
     # plt.show()
 
 
@@ -187,7 +248,7 @@ def knn(train_x, train_y, test_x):
         :param test_x: valor dos atributos de teste
         :return: prediction: predição de classe calculada para os valores de teste
     """
-    model = KNeighborsClassifier(n_neighbors=7)
+    model = KNeighborsClassifier(n_neighbors=7, p=1)
     model.fit(train_x, train_y)
     return model.predict(test_x)
 
@@ -203,6 +264,8 @@ def decision_tree(train_x, train_y, test_x):
     """
     model = DecisionTreeClassifier()
     model.fit(train_x, train_y)
+    # plot_tree(model)
+    # plt.show()
     return model.predict(test_x)
 
 
@@ -394,57 +457,9 @@ def final_test(train_x, test_x, train_y, test_y):
     rev_naive_bayes_list.append(mean_list[2])
     f1_naive_bayes_list.append(mean_list[3])
 
-    # plot_acc_dict = {
-    #     'knn': acc_knn_list,
-    #     'decision tree': acc_decision_tree_list,
-    #     'naive bayes': acc_naive_bayes_list
-    # }
-    #
-    # fig, ax = plt.subplots()
-    # ax.boxplot(plot_acc_dict.values())
-    # ax.set_xticklabels(plot_acc_dict.keys())
-    # plt.title('Acurácia')
-    # plt.show()
-    #
-    # plot_precision_dict = {
-    #     'knn': precision_knn_list,
-    #     'decision tree': precision_decision_tree_list,
-    #     'naive bayes': precision_naive_bayes_list
-    # }
-    #
-    # fig, ax = plt.subplots()
-    # ax.boxplot(plot_precision_dict.values())
-    # ax.set_xticklabels(plot_precision_dict.keys())
-    # plt.title('Precisão')
-    # plt.show()
-    #
-    # plot_rev_dict = {
-    #     'knn': rev_knn_list,
-    #     'decision tree': rev_decision_tree_list,
-    #     'naive bayes': rev_naive_bayes_list
-    # }
-    #
-    # fig, ax = plt.subplots()
-    # ax.boxplot(plot_rev_dict.values())
-    # ax.set_xticklabels(plot_rev_dict.keys())
-    # plt.title('Revogação')
-    # plt.show()
-    #
-    # plot_f1_dict = {
-    #     'knn': f1_knn_list,
-    #     'decision tree': f1_decision_tree_list,
-    #     'naive bayes': f1_naive_bayes_list
-    # }
-    #
-    # fig, ax = plt.subplots()
-    # ax.boxplot(plot_f1_dict.values())
-    # ax.set_xticklabels(plot_f1_dict.keys())
-    # plt.title('F1')
-    # plt.show()
-
 
 # list_folds = k_fold(5, test_dataset)
 # test_algorithms(list_folds)
 
-# Utiliza o holdout inicial de 80%/20%
+# Utiliza o holdout inicial de 80%/20% para fazer teste final
 final_test(train_atributes, test_atributes, train_classes, test_classes)
