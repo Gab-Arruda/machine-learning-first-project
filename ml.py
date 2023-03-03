@@ -139,7 +139,7 @@ def test_algorithms(data):
         train_x_normalized = preprocessing.normalize(train_x, norm='l2')
         test_x_normalized = preprocessing.normalize(test_x, norm='l2')
 
-        # Lembrar de testar diferentes parâmetros no treinamento para explicar no relatório os melhores
+        print('Teste com o fold', i+1)
         print('KNN')
         prediction = knn(train_x_normalized, train_y, test_x_normalized)
         matrix = confusion_matrix(prediction, test_y.tolist())
@@ -173,8 +173,10 @@ def test_algorithms(data):
         rev_naive_bayes_list.append(mean_list[2])
         f1_naive_bayes_list.append(mean_list[3])
 
-        print('_________________________________________________________________________')
+        print('______________________________________________________________________________')
 
+    print('Média e desvio padrão dos algoritmos pelo cross validation:')
+    print(' ')
     print('acc_knn_mean and std_dev:', np.mean(acc_knn_list), np.std(acc_knn_list))
     print('acc_decision_tree_list and std_dev:', np.mean(acc_decision_tree_list), np.std(acc_decision_tree_list))
     print('acc_naive_bayes_list and std_dev:', np.mean(acc_naive_bayes_list), np.std(acc_naive_bayes_list))
@@ -192,6 +194,7 @@ def test_algorithms(data):
     print('f1_knn_list and std_dev:', np.mean(f1_knn_list), np.std(f1_knn_list))
     print('f1_decision_tree_list and std_dev:', np.mean(f1_decision_tree_list), np.std(f1_decision_tree_list))
     print('f1_naive_bayes_list and std_dev:', np.mean(f1_naive_bayes_list), np.std(f1_naive_bayes_list))
+    print('______________________________________________________________________________')
 
     plot_acc_dict = {
         'knn': acc_knn_list,
@@ -236,7 +239,7 @@ def test_algorithms(data):
     ax4.boxplot(plot_f1_dict.values())
     ax4.set_xticklabels(plot_f1_dict.keys())
     plt.title('F1')
-    # plt.show()
+    plt.show()
 
 
 def knn(train_x, train_y, test_x):
@@ -424,6 +427,7 @@ def final_test(train_x, test_x, train_y, test_y):
     f1_decision_tree_list = []
     f1_naive_bayes_list = []
 
+    print('Teste final com o holdout de 80/20')
     print('KNN')
     prediction = knn(train_x_normalized, train_y, test_x_normalized)
     matrix = confusion_matrix(prediction, test_y.tolist())
@@ -458,8 +462,8 @@ def final_test(train_x, test_x, train_y, test_y):
     f1_naive_bayes_list.append(mean_list[3])
 
 
-# list_folds = k_fold(5, test_dataset)
-# test_algorithms(list_folds)
+list_folds = k_fold(5, test_dataset)
+test_algorithms(list_folds)
 
 # Utiliza o holdout inicial de 80%/20% para fazer teste final
 final_test(train_atributes, test_atributes, train_classes, test_classes)
